@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.checkBox{
+  /* border: 2px solid yellow; */
+}
+
+
+/* App.css */
+
+/* Style scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 0.5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #424242; /* Dark grey background */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #616161; /* Grey thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #757575; /* Lighter grey on hover */
+}

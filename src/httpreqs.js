@@ -70,7 +70,7 @@ const dummyHttpRequests = [
         body: 'This is a sample post body.',
         userId: 1,
       },
-    }
+    },
   ];
   
   export default dummyHttpRequests;

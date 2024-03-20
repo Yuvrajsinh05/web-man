@@ -1,0 +1,33 @@
+.grid_container {
+    overflow-x: auto;
+    flex: 1;
+    /* border: 2px solid red; */
+}
+
+.grid_inner {
+    display: grid;
+    /* border: 2px solid green; */
+    /* background-color: #343e46 !important; */
+    padding: 0px;
+    color: black;
+}
+
+.grid_item {
+    display: flex;
+    /* border: 2px solid pink; */
+    align-items: center;
+    border-right: 1px solid gray;
+    font-size: 15px;
+    color: white;
+    /* background-color: #343e46 !important; */
+    padding: 5px 15px;
+}
+
+.url {
+    flex-grow: 1;
+}
+
+.extraIcon {
+    margin-left: auto;
+    margin:5px;
+}

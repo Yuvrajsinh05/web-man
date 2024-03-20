@@ -1,8 +1,7 @@
-
-
 import './App.css';
 import * as React from 'react';
 import { styled, useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -23,6 +22,8 @@ import Tooltip from '@mui/material/Tooltip';
 import dummyHttpRequests from './httpreqs';
 import { Button } from '@mui/material';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
+import DynamicBoxLine from './component/reqestsboxline';
+
 
 const drawerWidth = 340;
 
@@ -91,10 +92,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+const ContentWrapper = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+  overflow: 'auto',
+}));
+
 function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,9 +136,19 @@ function App() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Web Man
+            <Typography sx={{ width: '85%' }} variant="h4" noWrap component="div">
+              <span style={{ color: 'green' }}><b>Web</b></span><span style={{ color: 'orange' }}> Man</span>
             </Typography>
+            <div style={{ float: 'right' }}>
+              <Typography sx={{ display: 'flex', alignItems: 'center', margin: 'auto' }} variant="h6" noWrap component="div">
+                <a href='https://github.com/Yuvrajsinh05/web-man' style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center' }} target='_blank'>
+                  <span style={{ fontSize: 'inherit' }}>Developed By</span>
+                  <GitHubIcon style={{ fontSize: 'inherit', marginLeft: '0.5em' }} />
+                </a>
+              </Typography>
+            </div>
+
+
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -141,19 +158,16 @@ function App() {
             </IconButton>
           </DrawerHeader>
           <Divider />
-
           <List>
-          <ListItem disablePadding>
+            <ListItem disablePadding>
               <ListItemButton>
-                <ListItemIcon sx={{fontSize: '0.8rem',color:'darkcyan'}}>
-              <AddToPhotosIcon />
+                <ListItemIcon sx={{ fontSize: '0.8rem', color: 'darkcyan' }}>
+                  <AddToPhotosIcon />
                 </ListItemIcon>
-                
-                  <ListItemText
-                    sx={{ fontSize: '0.9rem', overflowWrap: 'break-word' ,color:'darkcyan'}}
-                    primary={"Add New Request"}
-                  />
-                
+                <ListItemText
+                  sx={{ fontSize: '0.9rem', overflowWrap: 'break-word', color: 'darkcyan' }}
+                  primary={"Add New Request"}
+                />
               </ListItemButton>
             </ListItem>
             {dummyHttpRequests.map((request, index) => (
@@ -171,37 +185,25 @@ function App() {
                 </ListItemButton>
               </ListItem>
             ))}
-
-
           </List>
         </Drawer>
-        <Box open={open} sx={{ padding: 3 }}>
+        <ContentWrapper sx={{ padding: 0.5 }}>
           <DrawerHeader />
-          <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-            enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-            imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-            Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-            Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-            adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-            nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-            leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-            feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-            sapien faucibus et molestie ac.
-          </Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-            eget nulla facilisi etiam dignis   eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-            posuere sollicitudin aliquam ultrices sagittis orci a.
-          </Typography>
-        </Box>
+          <DynamicBoxLine dummyHttpRequests={dummyHttpRequests} />
+          <div className={'checkBox'}>
+            <Typography paragraph>
+              {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer quis.
+              ras tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac. */}
+            </Typography>
+            <Typography paragraph>
+              {/* Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a. */}
+            </Typography>
+          </div>
+        </ContentWrapper>
       </Box>
-
-
     </ThemeProvider>
   );
 }
 
 export default App;
+
