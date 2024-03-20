@@ -3,8 +3,7 @@ import * as React from 'react';
 import { styled, useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
+
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,89 +19,25 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import dummyHttpRequests from './httpreqs';
-import { Button } from '@mui/material';
+
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import DynamicBoxLine from './component/reqestsboxline';
+import HttpRequestInput from './component/dropurlsend/dropdownsend';
+import {DrawerHeader ,AppBar ,Drawer ,ContentWrapper} from"./customConfig";
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentUrl } from './features/requestSlice';
+import RequestPanelTabs from './component/reqpanel/reqpanel';
 
 
-const drawerWidth = 340;
-
-const openedMixin = (theme) => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-});
-
-const closedMixin = (theme) => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
-  }),
-);
-
-const ContentWrapper = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  flexGrow: 1,
-  overflow: 'auto',
-}));
 
 function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const requests = useSelector(state => state.request.value);
+  const currentUrl = useSelector(state => state.request.currentUrl);
 
+  const dispatch =  useDispatch()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -137,7 +72,7 @@ function App() {
               <MenuIcon />
             </IconButton>
             <Typography sx={{ width: '85%' }} variant="h4" noWrap component="div">
-              <span style={{ color: 'green' }}><b>Web</b></span><span style={{ color: 'orange' }}> Man</span>
+              <span style={{ color: 'green' }}><b> Web</b></span><span style={{ color: 'orange' }}> Man <SmartToyIcon/> </span>
             </Typography>
             <div style={{ float: 'right' }}>
               <Typography sx={{ display: 'flex', alignItems: 'center', margin: 'auto' }} variant="h6" noWrap component="div">
@@ -170,11 +105,12 @@ function App() {
                 />
               </ListItemButton>
             </ListItem>
-            {dummyHttpRequests.map((request, index) => (
-              <ListItem key={index} disablePadding>
+            {requests.map((request, index) => (
+              <ListItem onClick={()=>dispatch(setCurrentUrl(request))} key={index} disablePadding>
                 <ListItemButton>
-                  <ListItemIcon sx={{ color: request.method == 'GET' ? "#1b5e20" : "#f57f17", fontSize: '0.8rem' }}>
-                    {request.method}
+                  <ListItemIcon sx={{ color: request?.method === 'GET' ? "#1b5e20" : (request?.method === 'POST' ? '#f57f17' : 'white') , fontSize:'0.8rem' }}
+>
+                    {request?.method || "N/S"}
                   </ListItemIcon>
                   <Tooltip title={request.url} arrow>
                     <ListItemText
@@ -190,13 +126,13 @@ function App() {
         <ContentWrapper sx={{ padding: 0.5 }}>
           <DrawerHeader />
           <DynamicBoxLine dummyHttpRequests={dummyHttpRequests} />
+          <div style={{fontSize:'10px' ,paddingLeft:'15px' ,color:'gray'}}>{currentUrl?.url}</div>
           <div className={'checkBox'}>
             <Typography paragraph>
-              {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer quis.
-              ras tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac. */}
+               <HttpRequestInput/>
             </Typography>
             <Typography paragraph>
-              {/* Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignis eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a. */}
+              <RequestPanelTabs/>
             </Typography>
           </div>
         </ContentWrapper>

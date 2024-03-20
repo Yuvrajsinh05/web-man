@@ -25,3 +25,10 @@ To run this project locally, follow these steps:
 Contributions are welcome! As this project is still in its early stages, there are plenty of opportunities for developers to get involved. Whether you want to add new features, improve existing functionality, or fix bugs, your contributions are appreciated. Please feel free to open an issue or submit a pull request.
 
 
+handle  redux 
+
+-- handle array of request
+-- currentvisiting url
+-- remove url from array 
+-- add new url from array  
+-- modify url
