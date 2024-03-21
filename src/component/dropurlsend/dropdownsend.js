@@ -45,15 +45,12 @@ const HttpRequestInput = () => {
 
   const handleUrlChange = (event) => {
     event.preventDefault(); 
-    const newUrl = event?.target?.value || ''; // Provide a default value if event?.target?.value is undefined
+    const newUrl = event?.target?.value || '';
     setUrl(newUrl);
   };
   
 
-  console.log("allrequests", allrequests)
   const handleSend = () => {
-    console.log("sended")
-    // return;
     if (currentUrl?.id) {
 
       const modified = {

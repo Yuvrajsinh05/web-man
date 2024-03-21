@@ -11,15 +11,13 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     addRequest: (state, action) => {
-      // Concatenate the new item with the existing array
       const newValue = [...state.value, action.payload];
       return { ...state, value: newValue };
     },
     setCurrentUrl: (state, action) => {
-      state.currentUrl = action.payload; // Set the currentUrl to the payload value
+      state.currentUrl = action.payload;
     },
     removeRequest: (state, action) => {
-      // Filter out the URL to remove
       const filtered = state.value.filter(item => item.id !== action.payload.id);
       console.log("filtered",filtered)
       state.value =filtered;
@@ -31,16 +29,16 @@ export const counterSlice = createSlice({
         state.value = [...newFiltered]
 
     },
-    decrement: (state) => {
-      state.value -= 1; // This line looks incorrect, you might want to revise it
+    cleanUp: (state) => {
+      state.value = []
     },
     incrementByAmount: (state, action) => {
-      state.value += action.payload; // This line looks incorrect, you might want to revise it
+      state.value += action.payload;
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addRequest, setCurrentUrl, removeRequest ,modifyRequest } = counterSlice.actions
+export const { addRequest, setCurrentUrl, removeRequest ,modifyRequest ,cleanUp } = counterSlice.actions
 
 export default counterSlice.reducer

@@ -2,13 +2,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './reqbox.module.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch
-import { addRequest, removeRequest, setCurrentUrl } from '../features/requestSlice';
-// import { addRequest } from './features/requestSlice'; // Import addRequest action
+import { useSelector, useDispatch } from 'react-redux';
+import { addRequest, cleanUp, removeRequest, setCurrentUrl } from '../features/requestSlice';
+
+
 
 const DynamicBoxLine = () => {
-    const requests = useSelector(state => state.request.value); // Use Redux state instead of local state
-    const dispatch = useDispatch(); // Initialize dispatch
+    const requests = useSelector(state => state.request.value);
+    const dispatch = useDispatch(); 
     const currentUrl = useSelector(state => state.request.currentUrl);
     
     const maxLengthMapping = {
@@ -23,11 +24,10 @@ const DynamicBoxLine = () => {
         9: 6,
         10: 5,
         11: 4,
-        // Add more cases as needed
     };
 
-    // Determine the maximum URL length based on requests.length
-    const maxUrlLength = maxLengthMapping[requests?.length] || 3; // Default to 3 characters if not specified in mapping
+    
+    const maxUrlLength = maxLengthMapping[requests?.length] || 3;
 
     const limitUrl = (url, maxLength) => {
         return url?.length > maxLength ? url?.substring(0, maxLength) + '..' : url;
@@ -58,7 +58,7 @@ const DynamicBoxLine = () => {
             <div className={styles.extraIcon} onClick={() => handleAddRequest()}>
                 <AddIcon />
             </div>
-            <div className={styles.extraIcon}>
+            <div className={styles.extraIcon} onClick={()=> dispatch(cleanUp())}>
                 <DeleteForeverIcon />
             </div>
         </div>
