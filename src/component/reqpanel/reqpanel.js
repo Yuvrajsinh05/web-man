@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Tab, TextField, Box, Grid, IconButton, Typography } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
+import ResponseDetails from './response';
 
 function RequestPanelTabs() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -28,14 +29,14 @@ function RequestPanelTabs() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={3}>
-        <Tabs orientation="vertical" value={tabIndex} onChange={handleTabChange}>
+      <Grid item xs={12}>
+        <Tabs orientation="horizontal" value={tabIndex} onChange={handleTabChange}>
           <Tab label="Body" />
           <Tab label="Params" />
           <Tab label="Headers" />
         </Tabs>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={12} md={6}>
         <TabPanelContainer value={tabIndex} index={0}>
           {/* Body Tab */}
           <TextField sx={{ border: '2px solid white', margin: 0 }}  fullWidth multiline rows={4} />
@@ -47,25 +48,22 @@ function RequestPanelTabs() {
         <TabPanelContainer value={tabIndex} index={2}>
           {/* Headers Tab */}
           {headers.map((header, index) => (
-    
-            <Grid container spacing={1} key={index}sx={{marginTop: index==0 ? '0px' :'5px'}} alignItems="center">
-              <Grid item xs={5}>
+            <Grid container spacing={1} key={index} sx={{ marginTop: index === 0 ? '0px' : '5px' }} alignItems="center">
+              <Grid item xs={12} sm={5}>
                 <TextField
-                  // variant="outlined"
                   fullWidth
                   value={header.key}
                   onChange={(e) => handleHeaderChange(index, 'key', e.target.value)}
                 />
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={12} sm={5}>
                 <TextField
-                  variant="outlined"
                   fullWidth
-                  value={index}
+                  value={header.value}
                   onChange={(e) => handleHeaderChange(index, 'value', e.target.value)}
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={12} sm={2}>
                 <IconButton onClick={() => removeHeader(index)}>
                   <Delete />
                 </IconButton>
@@ -78,6 +76,9 @@ function RequestPanelTabs() {
           </IconButton>
         </TabPanelContainer>
       </Grid>
+      <Grid item xs={12} p={3} md={6}>
+        <ResponseDetails/>
+      </Grid>
     </Grid>
   );
 }
@@ -88,7 +89,7 @@ function TabPanelContainer(props) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`tabpanel-${index}`} aria-labelledby={`tab-${index}`}>
       {value === index && (
-        <Box p={1} sx={{marginRight:'1.9rem', borderRadius: '5px'}}>
+        <Box p={1} sx={{ marginRight: '1.9rem', borderRadius: '5px' }}>
           {children}
         </Box>
       )}
