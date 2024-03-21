@@ -65,12 +65,24 @@ const dummyHttpRequests = [
         Authorization: 'Bearer your-access-token',
         'Content-Type': 'application/json',
       },
-      body: {
-        title: 'Sample Post',
-        body: 'This is a sample post body.',
-        userId: 1,
-      },
+      body:{
+        name: "David Brown",
+        age: 45,
+        gender: "Male",
+        email: "david.brown@example.com",
+        phone: "+14443332222",
+        address: {
+            street: "987 Maple Street",
+            city: "Miami",
+            state: "FL",
+            postal_code: "33101",
+            country: "USA"
+        },
+        interests: ["fishing", "reading", "swimming"],
+        friends: []
     },
+    },
+
   ];
   
   export default dummyHttpRequests;

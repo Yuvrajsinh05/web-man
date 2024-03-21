@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Button, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { Send as SendIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRequest, increment } from '../../features/requestSlice';
+import { addRequest, increment, modifyRequest, setCurrentUrl } from '../../features/requestSlice';
 
 
 const RootContainer = styled('div')({
@@ -33,26 +33,50 @@ const HttpRequestInput = () => {
   const currentUrl = useSelector(state => state.request.currentUrl);
 
 
+  useEffect(() => {
+    setMethod(currentUrl?.method)
+    setUrl(currentUrl?.url)
+  }, [currentUrl])
+
   const handleMethodChange = (event) => {
-    setMethod(event.target.value);
+    const meth = event.target.value || ''
+    setMethod(meth);
   };
 
   const handleUrlChange = (event) => {
-    setUrl(event.target.value);
+    event.preventDefault(); 
+    const newUrl = event?.target?.value || ''; // Provide a default value if event?.target?.value is undefined
+    setUrl(newUrl);
   };
+  
 
+  console.log("allrequests", allrequests)
   const handleSend = () => {
-    dispatch(addRequest({ method, url , id: allrequests.length+1}))
+    console.log("sended")
+    // return;
+    if (currentUrl?.id) {
+
+      const modified = {
+        id: currentUrl.id,
+        method,
+        url
+      }
+      dispatch(modifyRequest(modified))
+    } else {
+      let checkUrl = url || "New URL"
+      dispatch(addRequest({ method, url:checkUrl, id: allrequests?.length + 1 }))
+      dispatch(setCurrentUrl({ method, url:checkUrl, id: allrequests?.length + 1 }))
+    }
   };
 
   return (
     <RootContainer>
       <HttpMethodSelector
         select
-        value={currentUrl?.method || ''}
-        onChange={handleMethodChange}
+        value={method || ''}
+        onChange={(e)=> handleMethodChange(e)}
         variant="outlined"
-        InputProps={{ sx: { color:currentUrl?.method === 'GET' ? 'green' : 'orange' } }}
+        InputProps={{ sx: { color: method === 'GET' ? 'green' : 'orange' } }}
       >
         <MenuItem value="GET" sx={{ color: 'green' }}>
           GET
@@ -64,8 +88,8 @@ const HttpRequestInput = () => {
       <UrlTextField
         placeholder="Enter URL"
         variant="outlined"
-        value={currentUrl?.url}
-        onChange={handleUrlChange}
+        value={url}
+        onChange={(e) => handleUrlChange(e)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

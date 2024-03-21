@@ -92,10 +92,20 @@ const DummyDetails = ({ tabValue }) => {
   };
 
   const body = {
-    'username': 'example_user',
-    'password': 'secretpassword'
-  };
-
+    "id": 123,
+    "name": "John Doe",
+    "age": 30,
+    "email": "john.doe@example.com",
+    "phone": "+1234567890",
+    "occupation": "Software Engineer",
+    "education": {
+      "degree": "Bachelor's",
+      "major": "Computer Science",
+      "university": "University XYZ",
+      "graduation_year": 2015
+    },
+  }
+  
   return (
     <Grid item xs={12} mt={3}>
       <Typography variant="body1">

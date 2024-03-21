@@ -23,7 +23,7 @@ import dummyHttpRequests from './httpreqs';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import DynamicBoxLine from './component/reqestsboxline';
 import HttpRequestInput from './component/dropurlsend/dropdownsend';
-import {DrawerHeader ,AppBar ,Drawer ,ContentWrapper} from"./customConfig";
+import { DrawerHeader, AppBar, Drawer, ContentWrapper } from "./customConfig";
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUrl } from './features/requestSlice';
@@ -37,7 +37,7 @@ function App() {
   const requests = useSelector(state => state.request.value);
   const currentUrl = useSelector(state => state.request.currentUrl);
 
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch()
   const handleDrawerOpen = () => {
     setOpen(true);
   };

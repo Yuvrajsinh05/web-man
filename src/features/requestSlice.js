@@ -24,6 +24,13 @@ export const counterSlice = createSlice({
       console.log("filtered",filtered)
       state.value =filtered;
     },
+    modifyRequest : (state , action) => {
+        let prevState = [...state.value]
+        let newFiltered = prevState.filter(item => item.id !== action.payload.id); 
+        newFiltered.push(action.payload)
+        state.value = [...newFiltered]
+
+    },
     decrement: (state) => {
       state.value -= 1; // This line looks incorrect, you might want to revise it
     },
@@ -34,6 +41,6 @@ export const counterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addRequest, setCurrentUrl, removeRequest } = counterSlice.actions
+export const { addRequest, setCurrentUrl, removeRequest ,modifyRequest } = counterSlice.actions
 
 export default counterSlice.reducer

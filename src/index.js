@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom'; // Change import statement
+import ReactDOM from 'react-dom/client'; // Change import statement
 import App from './App';
 import { store } from './features/store';
 import { Provider } from 'react-redux';

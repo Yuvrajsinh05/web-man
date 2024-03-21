@@ -1,11 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, TextField, Box, Grid, IconButton, Typography } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import ResponseDetails from './response';
+import { useDispatch, useSelector } from 'react-redux';
+import { modifyRequest } from '../../features/requestSlice';
+
 
 function RequestPanelTabs() {
   const [tabIndex, setTabIndex] = useState(0);
-  const [headers, setHeaders] = useState([{ key: 'Authorization', value: '' },{ key: 'Content-Type', value: '' }]);
+  const [headers, setHeaders] = useState([{ key: 'Authorization', value: '' }, { key: 'Content-Type', value: '' }]);
+  const [inputValue, setInputValue] = useState('');
+  const [isValidJson, setIsValidJson] = useState(true);
+  const currentUrl = useSelector(state => state.request.currentUrl);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!currentUrl?.body) {
+      setInputValue('')
+      return
+    };
+    setInputValue(JSON.stringify(currentUrl?.body, null, 2))
+  }, [currentUrl])
+
+  useEffect(() => {
+    if (!currentUrl?.headers) {
+      setHeaders([{ key: 'Authorization', value: '' }, { key: 'Content-Type', value: '' }]);
+      return;
+    }
+    const newHeaders = Object.entries(currentUrl.headers).map(([key, value]) => ({ key, value }));
+    setHeaders(newHeaders);
+  }, [currentUrl]);
+
+
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setInputValue(value);
+    if (value.trim() === '') {
+      setIsValidJson(true);
+    } else {
+      try {
+        JSON.parse(value);
+        setIsValidJson(true);
+      } catch (error) {
+        setIsValidJson(false);
+      }
+    }
+  };
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -31,22 +71,12 @@ function RequestPanelTabs() {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Tabs orientation="horizontal" value={tabIndex} onChange={handleTabChange}>
-          <Tab label="Body" />
-          <Tab label="Params" />
           <Tab label="Headers" />
+          <Tab label="Body" />
         </Tabs>
       </Grid>
       <Grid item xs={12} md={6}>
         <TabPanelContainer value={tabIndex} index={0}>
-          {/* Body Tab */}
-          <TextField sx={{ border: '2px solid white', margin: 0 }}  fullWidth multiline rows={4} />
-        </TabPanelContainer>
-        <TabPanelContainer value={tabIndex} index={1}>
-          {/* Authorization Tab */}
-          <TextField label="Authorization Token" variant="outlined" fullWidth />
-        </TabPanelContainer>
-        <TabPanelContainer value={tabIndex} index={2}>
-          {/* Headers Tab */}
           {headers.map((header, index) => (
             <Grid container spacing={1} key={index} sx={{ marginTop: index === 0 ? '0px' : '5px' }} alignItems="center">
               <Grid item xs={12} sm={5}>
@@ -75,9 +105,23 @@ function RequestPanelTabs() {
             <Typography variant="body2">Add Header</Typography>
           </IconButton>
         </TabPanelContainer>
+        <TabPanelContainer value={tabIndex} index={1}>
+          <TextField
+            sx={{
+              margin: 0,
+            }}
+            fullWidth
+            multiline
+            rows={20}
+            value={inputValue}
+            onChange={handleInputChange}
+            error={!isValidJson && inputValue.trim() !== ''}
+            helperText={!isValidJson && inputValue.trim() !== '' && "Invalid JSON format"}
+          />
+        </TabPanelContainer>
       </Grid>
       <Grid item xs={12} p={3} md={6}>
-        <ResponseDetails/>
+        <ResponseDetails />
       </Grid>
     </Grid>
   );
