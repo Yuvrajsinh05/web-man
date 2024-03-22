@@ -62,7 +62,8 @@ const ResponseDetails = () => {
               
               </Grid>
               <Grid item xs={6} sm={2.5}>
-                <Typography variant="subtitle1" sx={{fontSize:'10px'}}>Response Size: <strong>1234 bytes</strong></Typography>
+              {currentUrl?.response?.dataSizeInBytes ?  
+                <Typography variant="subtitle1" sx={{fontSize:'10px'}}>Response Size: <strong>{currentUrl?.response?.dataSizeInBytes} bytes</strong></Typography> : null}
               </Grid>
 
               {/* Tabs for Headers, Cookies, Body */}

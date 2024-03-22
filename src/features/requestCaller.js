@@ -10,6 +10,9 @@ export const executeRequest = async (request) => {
             data: body ? JSON.stringify(body) : null,
         });
         const cookies = response?.headers['set-cookie'] || null;
+        const contentLength = response.headers['content-length'] || 0;
+        const jsonData = JSON.stringify(response.data);
+        const dataSizeInBytes = new Blob([jsonData]).size; 
         const headersObj = {};
         for (const [key, value] of Object.entries(response.headers)) {
             headersObj[key] = value;
@@ -18,6 +21,7 @@ export const executeRequest = async (request) => {
             status: response?.status || 400,
             headers: headersObj,
             body: response?.data || {},
+            dataSizeInBytes
         }
         return Obj;
     } catch (error) {
@@ -25,6 +29,7 @@ export const executeRequest = async (request) => {
             status: 500,
             headers: {},
             body: { error: error?.message ||  "Something Missing" },
+            dataSizeInBytes : 0
         }
         return Obj
     }
