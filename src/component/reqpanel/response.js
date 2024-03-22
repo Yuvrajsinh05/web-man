@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Paper, Typography, Tabs, Tab, Select, MenuItem } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 
 // Custom dark and gray theme
 const darkGrayTheme = createTheme({
@@ -19,15 +20,29 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 const ResponseDetails = () => {
   const [tabValue, setTabValue] = useState(0);
+  const currentUrl = useSelector(state => state.request.currentUrl);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const handleResponseFormatChange = (event) => {
-    // Handle response format change here
-  };
 
+
+  const getStatusColor = (statusCode) => {
+    if (statusCode >= 200 && statusCode < 300) {
+      return 'green'; 
+    } else if (statusCode >= 400 && statusCode < 500) {
+      return 'orange';
+    } else if (statusCode >= 500 && statusCode < 600) {
+      return 'red'; 
+    } else {
+      return 'black'; 
+    }
+  }
+
+  function handleResponseFormatChange(){
+
+  }
   return (
     <ThemeProvider theme={darkGrayTheme}>
       <Grid container spacing={2}>
@@ -39,9 +54,12 @@ const ResponseDetails = () => {
                 <Typography variant="h6">Response Details</Typography>
               </Grid>
               <Grid item xs={6} sm={2.5}>
-                <Typography variant="subtitle1" style={{ color: tabValue === 0 ? green[500] : red[500] }}>
-                  Status Code: <strong>{tabValue === 0 ? '200' : '400'}</strong>
+                {currentUrl?.response?.status ?  
+                  <Typography variant="subtitle1" style={{ color: getStatusColor(currentUrl?.response?.status) }}>
+                  Status Code: <strong>{currentUrl?.response?.status}</strong>
                 </Typography>
+                :  null}
+              
               </Grid>
               <Grid item xs={6} sm={2.5}>
                 <Typography variant="subtitle1" sx={{fontSize:'10px'}}>Response Size: <strong>1234 bytes</strong></Typography>
@@ -79,67 +97,45 @@ const ResponseDetails = () => {
 export default ResponseDetails;
 
 const DummyDetails = ({ tabValue }) => {
-  // Dummy data for demonstration
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer xyz123',
-    'User-Agent': 'MyApp/1.0'
-  };
+  const currentUrl = useSelector(state => state.request.currentUrl);
+ 
 
-  const cookies = {
-    'session_id': 'abc123',
-    'user_id': '123456'
-  };
 
-  const body = {
-    "id": 123,
-    "name": "John Doe",
-    "age": 30,
-    "email": "john.doe@example.com",
-    "phone": "+1234567890",
-    "occupation": "Software Engineer",
-    "education": {
-      "degree": "Bachelor's",
-      "major": "Computer Science",
-      "university": "University XYZ",
-      "graduation_year": 2015
-    },
-  }
+  const cookies = {};
   
+
   return (
-    <Grid item xs={12} mt={3}>
-      <Typography variant="body1">
-        {tabValue === 0 && (
-          <div>
-            <Typography variant="subtitle1">Headers:</Typography>
-            <ul>
-              {Object.entries(headers).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong> {value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {tabValue === 1 && (
-          <div>
-            <Typography variant="subtitle1">Cookies:</Typography>
-            <ul>
-              {Object.entries(cookies).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong> {value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {tabValue === 2 && (
-          <div>
-            <Typography variant="subtitle1">Body:</Typography>
-            <pre>{JSON.stringify(body, null, 2)}</pre>
-          </div>
-        )}
-      </Typography>
-    </Grid>
+<Grid item xs={12} mt={3} sx={{ overflow: 'auto', maxHeight: '400px', border: '1px solid #ccc', borderRadius: '5px', padding: '10px'}}>
+  <Typography variant="body1">
+    {tabValue === 0 && (
+      <div>
+        <ul>
+          {currentUrl?.response?.headers && Object.entries(currentUrl.response.headers).map(([key, value]) => (
+            <li key={key}>
+              <strong>{key}:</strong> {value}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    {tabValue === 1 && (
+      <div>
+        <ul>
+          {cookies && Object.entries(cookies).map(([key, value]) => (
+            <li key={key}>
+              <strong>{key}:</strong> {value}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    {tabValue === 2 && (
+      <div>
+        <pre>{JSON.stringify(currentUrl?.response?.body, null, 2)}</pre>
+      </div>
+    )}
+  </Typography>
+</Grid>
+
   );
 };

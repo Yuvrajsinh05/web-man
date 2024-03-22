@@ -1,89 +1,46 @@
 const dummyHttpRequests = [
-    {
-      id: 1,
-      method: 'GET',
-      url: 'https://api.example.com/users',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-        'Content-Type': 'application/json',
-      },
-      body: null,
+  {
+    id: 1,
+    method: 'GET',
+    url: 'https://jsonplaceholder.typicode.com/users',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    {
-      id: 2,
-      method: 'POST',
-      url: 'https://api.example.com/posts',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-        'Content-Type': 'application/json',
-      },
-      body: {
-        title: 'Sample Post',
-        body: 'This is a sample post body.',
-        userId: 1,
-      },
+    body: null,
+  },
+  {
+    id: 2,
+    method: 'GET',
+    url: 'https://jsonplaceholder.typicode.com/posts/1',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    {
-      id: 3,
-      method: 'GET',
-      url: 'https://api.example.com/posts/1',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-        'Content-Type': 'application/json',
-      },
-      body: {
-        id: 1,
-        title: 'Updated Post',
-        body: 'This post has been updated.',
-        userId: 1,
-      },
-    },
-    {
-      id: 4,
-      method: 'GET',
-      url: 'https://api.example.com/posts/1',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-      },
-      body: null,
-    },
-    {
-      id: 5,
-      method: 'GET',
-      url: 'https://api.example.com/users?filter=active&sortBy=name&limit=10&page=1&search=John%20Doe',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-        'Content-Type': 'application/json',
-      },
-      body: null,
-    },
-    {
-      id: 6,
-      method: 'POST',
-      url: 'https://api.example.com/posts/create?userId=1&category=tech&tag=javascript',
-      headers: {
-        Authorization: 'Bearer your-access-token',
-        'Content-Type': 'application/json',
-      },
-      body:{
-        name: "David Brown",
-        age: 45,
-        gender: "Male",
-        email: "david.brown@example.com",
-        phone: "+14443332222",
-        address: {
-            street: "987 Maple Street",
-            city: "Miami",
-            state: "FL",
-            postal_code: "33101",
-            country: "USA"
-        },
-        interests: ["fishing", "reading", "swimming"],
-        friends: []
-    },
-    },
+    body: null,
+  },
 
-  ];
-  
-  export default dummyHttpRequests;
-  
+  {
+    id: 6,
+    method: 'POST',
+    url: 'https://jsonplaceholder.typicode.com/users',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: {
+      name: 'Jane Doe',
+      username: 'jane',
+      email: 'jane@example.com',
+    },
+  },
+  {
+    id: 7,
+    method: 'GET',
+    url: `https://ecombackend-303e.onrender.com/admin/Fashion/Women's%20Clothing`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NWYwMjliNTA3NTg5NzUxNTUxZTUyMzAiLCJpYXQiOjE3MTExMjI0NjIsImV4cCI6MTcxMTIwODg2Mn0.Thk2piP75RA_He-Pikc-2Tp3uvKg4Bna2glPdVy3EfA'
+    },
+  },
+];
+
+
+export default dummyHttpRequests;

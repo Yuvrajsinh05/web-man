@@ -3,7 +3,8 @@ import { styled } from '@mui/material/styles';
 import { Button, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { Send as SendIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRequest , modifyRequest, setCurrentUrl } from '../../features/requestSlice';
+import { addRequest, modifyRequest, setCurrentUrl } from '../../features/requestSlice';
+import { executeRequest } from '../../features/requestCaller';
 
 
 const RootContainer = styled('div')({
@@ -44,21 +45,24 @@ const HttpRequestInput = () => {
   };
 
   const handleUrlChange = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     const newUrl = event?.target?.value || '';
     setUrl(newUrl);
   };
-  
 
-  const handleSend = () => {
+
+  const handleSend = async () => {
     if (currentUrl?.id) {
-      const modified = { id: currentUrl.id, method, url }
+      let modified = { ...currentUrl, method: method, url: url };
+      let response = await executeRequest(modified)
+      modified = { ...modified, response }
       dispatch(modifyRequest(modified))
       dispatch(setCurrentUrl(modified))
     } else {
       let checkUrl = url || "New URL"
-      dispatch(addRequest({ method, url: checkUrl, id: allrequests?.length + 1 }))
-      dispatch(setCurrentUrl({ method, url: checkUrl, id: allrequests?.length + 1 }))
+      let response = await executeRequest({ method, url: checkUrl, id: allrequests?.length + 1 })
+      dispatch(addRequest({ method, url: checkUrl, id: allrequests?.length + 1 ,response}))
+      dispatch(setCurrentUrl({ method, url: checkUrl, id: allrequests?.length + 1 ,response}))
     }
   };
 
@@ -67,7 +71,7 @@ const HttpRequestInput = () => {
       <HttpMethodSelector
         select
         value={method || ''}
-        onChange={(e)=> handleMethodChange(e)}
+        onChange={(e) => handleMethodChange(e)}
         variant="outlined"
         InputProps={{ sx: { color: method === 'GET' ? 'green' : 'orange' } }}
       >
