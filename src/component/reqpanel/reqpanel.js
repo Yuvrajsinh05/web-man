@@ -3,7 +3,7 @@ import { Tabs, Tab, TextField, Box, Grid, IconButton, Typography } from '@mui/ma
 import { Add, Delete } from '@mui/icons-material';
 import ResponseDetails from './response';
 import { useDispatch, useSelector } from 'react-redux';
-import { modifyRequest } from '../../features/requestSlice';
+import { addRequest, modifyRequest, setCurrentUrl } from '../../features/requestSlice';
 
 
 function RequestPanelTabs() {
@@ -12,7 +12,30 @@ function RequestPanelTabs() {
   const [inputValue, setInputValue] = useState('');
   const [isValidJson, setIsValidJson] = useState(true);
   const currentUrl = useSelector(state => state.request.currentUrl);
+  const allrequests = useSelector((state) => state.request.value)
   const dispatch = useDispatch();
+
+
+
+
+
+  useEffect(() => {
+    if (currentUrl?.id && isValidJson && inputValue) {
+      let tempObjUrl = { ...currentUrl }
+      tempObjUrl['body'] = JSON.parse(inputValue)
+      dispatch(modifyRequest(tempObjUrl))
+      dispatch(setCurrentUrl(tempObjUrl))
+    } else {
+      if (isValidJson && inputValue) {
+        dispatch(addRequest({ url: "NEW URL", id: allrequests?.length + 1, body: JSON.parse(inputValue) }))
+        dispatch(setCurrentUrl({ url: "NEW URL", id: allrequests?.length + 1, body: JSON.parse(inputValue) }))
+      }
+    }
+  }, [inputValue])
+
+
+
+
   useEffect(() => {
     if (!currentUrl?.body) {
       setInputValue('')
@@ -47,6 +70,22 @@ function RequestPanelTabs() {
     }
   };
 
+  function handleStoreHeader(updatedHeaders) {
+    const desiredObject = {};
+    updatedHeaders.forEach(item => {
+      desiredObject[item.key] = item.value;
+    })
+    if(currentUrl?.id){
+      let cloneObjUrl = {...currentUrl}
+      cloneObjUrl.headers = desiredObject
+      dispatch(modifyRequest(cloneObjUrl))
+      dispatch(setCurrentUrl(cloneObjUrl))
+    }else{
+      dispatch(addRequest({ url: "NEW URL", id: allrequests?.length + 1 ,headers :desiredObject} ))
+      dispatch(setCurrentUrl({ url: "NEW URL", id: allrequests?.length + 1 ,headers :desiredObject}))
+    }
+  }
+
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
@@ -55,6 +94,7 @@ function RequestPanelTabs() {
     const updatedHeaders = [...headers];
     updatedHeaders[index][field] = value;
     setHeaders(updatedHeaders);
+    handleStoreHeader(updatedHeaders)
   };
 
   const addHeader = () => {
@@ -65,6 +105,7 @@ function RequestPanelTabs() {
     const updatedHeaders = [...headers];
     updatedHeaders.splice(index, 1);
     setHeaders(updatedHeaders);
+    handleStoreHeader(updatedHeaders)
   };
 
   return (

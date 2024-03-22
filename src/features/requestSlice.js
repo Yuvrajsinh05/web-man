@@ -19,16 +19,16 @@ export const counterSlice = createSlice({
     },
     removeRequest: (state, action) => {
       const filtered = state.value.filter(item => item.id !== action.payload.id);
-      console.log("filtered",filtered)
       state.value =filtered;
     },
-    modifyRequest : (state , action) => {
-        let prevState = [...state.value]
-        let newFiltered = prevState.filter(item => item.id !== action.payload.id); 
-        newFiltered.push(action.payload)
-        state.value = [...newFiltered]
-
-    },
+    modifyRequest: (state, action) => {
+      let prevState = [...state.value];
+      let Unlocked =  JSON.parse(JSON.stringify(prevState));
+      let newFiltered = Unlocked.filter(item => item.id !== action.payload.id); 
+      newFiltered.push(action.payload);
+      state.value = [...newFiltered];
+  }
+  ,
     cleanUp: (state) => {
       state.value = []
     },

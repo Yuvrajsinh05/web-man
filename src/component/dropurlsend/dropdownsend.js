@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Button, InputAdornment, TextField, MenuItem } from '@mui/material';
 import { Send as SendIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRequest, increment, modifyRequest, setCurrentUrl } from '../../features/requestSlice';
+import { addRequest , modifyRequest, setCurrentUrl } from '../../features/requestSlice';
 
 
 const RootContainer = styled('div')({
@@ -52,17 +52,13 @@ const HttpRequestInput = () => {
 
   const handleSend = () => {
     if (currentUrl?.id) {
-
-      const modified = {
-        id: currentUrl.id,
-        method,
-        url
-      }
+      const modified = { id: currentUrl.id, method, url }
       dispatch(modifyRequest(modified))
+      dispatch(setCurrentUrl(modified))
     } else {
       let checkUrl = url || "New URL"
-      dispatch(addRequest({ method, url:checkUrl, id: allrequests?.length + 1 }))
-      dispatch(setCurrentUrl({ method, url:checkUrl, id: allrequests?.length + 1 }))
+      dispatch(addRequest({ method, url: checkUrl, id: allrequests?.length + 1 }))
+      dispatch(setCurrentUrl({ method, url: checkUrl, id: allrequests?.length + 1 }))
     }
   };
 
