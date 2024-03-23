@@ -25,12 +25,23 @@ export const executeRequest = async (request) => {
         }
         return Obj;
     } catch (error) {
-        const Obj = {
-            status: 500,
-            headers: {},
-            body: { error: error?.message ||  "Something Missing" },
-            dataSizeInBytes : 0
+        if (error.response) {
+            const errorResponse = {
+                status: error.response.status,
+                headers: error.response.headers,
+                body: error.response.data,
+                dataSizeInBytes: 0
+            };
+            return errorResponse;
+        } else {
+            const errorResponse = {
+                status: 500,
+                headers: {},
+                body: { error: error?.message || "Something went wrong" },
+                dataSizeInBytes: 0
+            };
+            return errorResponse;
         }
-        return Obj
+        
     }
 };
